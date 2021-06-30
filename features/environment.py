@@ -77,17 +77,13 @@ def before_all(context):
     path = [str(bin_dir)] + path
     context.env["PATH"] = path_sep.join(path)
 
-    # resolve the requirements using pip-compile from pip-tools due to
-    # this bug in pip: https://github.com/pypa/pip/issues/988
+    # pip install
     call([context.python, "-m", "pip", "install", "-U", "pip", "pip-tools"])
-    pip_compile = str(bin_dir / "pip-compile")
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        compiled_reqs = str(Path(tmpdirname) / "requirements.txt")
-        call([pip_compile, "requirements.txt", "-o", compiled_reqs])
-        call([context.pip, "install", "-r", compiled_reqs])
-
-    # install the plugin
+    call([context.pip, "install", "-r", "test_requirements.txt"])
     call([context.pip, "install", "."])
+
+    # pylint: disable=unused-argument
+    context.temp_dir = Path(tempfile.mkdtemp())
 
 
 def after_all(context):
