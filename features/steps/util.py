@@ -49,7 +49,7 @@ def wait_for(
     timeout_: int = 10,
     print_error: bool = True,
     sleep_for: int = 1,
-    **kwargs: Any
+    **kwargs: Any,
 ):
     """
     Run specified function until it returns expected result until timeout.
@@ -81,8 +81,8 @@ def wait_for(
         sleep(sleep_for)
 
     raise WaitForException(
-        "func: %s, didn't return '%s' within specified"
-        " timeout: %d" % (func, expected_result, timeout_)
+        f"func: {func}, didn't return '{expected_result}' within specified"
+        f" timeout: {timeout_}"
     )
 
 
@@ -121,9 +121,7 @@ def timeout(func: Callable, duration: int = 10, **kwargs: Any) -> Any:
 
     if "result" not in result_dict:
         raise TimeoutException(
-            "`{0}` did not finish executing within {1:d} seconds".format(
-                func.__name__, duration
-            )
+            f"`{func.__name__}` did not finish executing within {duration} seconds"
         )
     return result_dict["result"]
 

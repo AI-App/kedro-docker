@@ -7,7 +7,7 @@ install:
 	pip install .
 
 install-pip-setuptools:
-	python -m pip install -U "pip>=18.0, <21.0" "setuptools>=38.0, <47.0" wheel
+	python -m pip install -U "pip>=20.0" "setuptools>=38.0" wheel
 
 lint:
 	pre-commit run -a --hook-stage manual
