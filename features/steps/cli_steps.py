@@ -190,9 +190,6 @@ def create_project_from_config_file(context):
     telemetry_file = context.root_project_dir / ".telemetry"
     telemetry_file.write_text("consent: false", encoding="utf-8")
     assert res.returncode == 0
-    # prevent telemetry from prompting for input during e2e tests
-    telemetry_file = context.root_project_dir / ".telemetry"
-    telemetry_file.write_text("consent: false", encoding="utf-8")
 
 
 @given('I have executed the kedro command "{command}"')

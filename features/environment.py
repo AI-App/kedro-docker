@@ -111,9 +111,6 @@ def _setup_context_with_venv(context, venv_dir):
 
     return context
 
-    # pylint: disable=unused-argument
-    context.temp_dir = Path(tempfile.mkdtemp())
-
 
 def after_all(context):
     if "E2E_VENV" not in os.environ:
