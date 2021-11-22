@@ -28,6 +28,7 @@
 
 """Behave step definitions for the cli_scenarios feature."""
 import re
+import sys
 from pathlib import Path
 from time import sleep
 
@@ -184,15 +185,16 @@ def create_project_from_config_file(context):
         env=context.env,
         cwd=str(context.temp_dir),
     )
-    assert res.returncode == 0
-    # prevent telemetry from prompting for input during e2e tests
+
+    # add a consent file to prevent telemetry from prompting for input during e2e test
     telemetry_file = context.root_project_dir / ".telemetry"
     telemetry_file.write_text("consent: false", encoding="utf-8")
+    assert res.returncode == 0
 
 
 @given('I have executed the kedro command "{command}"')
-def exec_make_target_checked(context, command):
-    """Execute Makefile target"""
+def exec_kedro_command(context, command):
+    """Execute Kedro command and check the status."""
     make_cmd = [context.kedro] + command.split()
 
     res = run(make_cmd, env=context.env, cwd=str(context.root_project_dir))
@@ -225,6 +227,15 @@ def exec_kedro_target(context, command):
         )
 
 
+@given("I have executed kedro docker build with custom base image")
+@when("I execute kedro docker build with custom base image")
+def exec_docker_build_target(context):
+    """Execute Kedro Docker build with custom base image"""
+    base_image = f"python:3.{sys.version_info[1]}-buster"
+    cmd = [context.kedro, "docker", "build", "--base-image", base_image]
+    context.result = run(cmd, env=context.env, cwd=str(context.root_project_dir))
+
+
 @when('I occupy port "{port}"')
 def occupy_port(context, port):
     """Execute  target"""
@@ -241,11 +252,13 @@ def read_docker_stdout(context, msg):
 
     if hasattr(context.result.stdout, "read"):
         context.result.stdout = context.result.stdout.read().decode("utf-8")
+    if msg == "Python":
+        msg = f"Python 3.{sys.version_info[1]}"
 
     try:
         if msg not in context.result.stdout:
             print(context.result.stdout)
-            assert False, "Message '{0}' not found in stdout".format(msg)
+            assert False, f"Message '{msg}' not found in stdout"
     finally:
         kill_docker_containers(context.project_name)
 
@@ -260,7 +273,7 @@ def read_docker_stderr(context, msg):
     try:
         if msg not in context.result.stderr:
             print(context.result.stderr)
-            assert False, "Message '{0}' not found in stderr".format(msg)
+            assert False, f"Message '{msg}' not found in stderr"
     finally:
         kill_docker_containers(context.project_name)
 
@@ -270,9 +283,9 @@ def check_status_code(context):
     if context.result.returncode != OK_EXIT_CODE:
         print(context.result.stdout)
         print(context.result.stderr)
-        assert False, "Expected exit code {} but got {}".format(
-            OK_EXIT_CODE, context.result.returncode
-        )
+        assert (
+            False
+        ), f"Expected exit code {OK_EXIT_CODE} but got {context.result.returncode}"
 
 
 @then("I should get an error exit code")
@@ -280,9 +293,9 @@ def check_failed_status_code(context):
     if context.result.returncode == OK_EXIT_CODE:
         print(context.result.stdout)
         print(context.result.stderr)
-        assert False, "Expected exit code other than {} but got {}".format(
-            OK_EXIT_CODE, context.result.returncode
-        )
+        assert (
+            False
+        ), f"Expected exit code {OK_EXIT_CODE} but got {context.result.returncode}"
 
 
 @then('I should see messages from docker ipython startup including "{msg}"')
@@ -290,27 +303,30 @@ def check_docker_ipython_msg(context, msg):
     stdout = _get_docker_ipython_output(context)
     assert msg in stdout, (
         "Expected the following message segment to be printed on stdout: "
-        "{exp_msg},\nbut got {actual_msg}".format(exp_msg=msg, actual_msg=stdout)
+        f"{msg},\nbut got {stdout}"
     )
 
 
-@then("Jupyter Notebook should run on port {port}")
-def check_jupyter_nb_proc_on_port(context: behave.runner.Context, port: int):
+@then("Jupyter {command} should run on port {port}")
+def check_jupyter_nb_proc_on_port(
+    context: behave.runner.Context, command: str, port: int
+):
     """
     Check that jupyter notebook service is running on specified port
 
     Args:
         context: Test context
+        command: Jupyter command message to check
         port: Port to check
     """
-    url = "http://localhost:{:d}".format(int(port))
+    url = f"http://localhost:{int(port)}"
     wait_for(
         func=_check_service_up,
         expected_result=None,
         print_error=False,
         context=context,
         url=url,
-        string="Jupyter",
+        string=f"Jupyter {command}",
         timeout_=15,
     )
 

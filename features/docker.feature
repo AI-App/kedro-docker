@@ -65,11 +65,11 @@ Feature: Docker commands in new projects
     And A new docker image for test project should be created
 
   Scenario: Execute docker build target with custom base image
-    Given I have executed the kedro command "docker build --base-image python:3.7.8-buster"
+    Given I have executed kedro docker build with custom base image
     When I execute the kedro command "docker cmd python -V"
     Then I should get a successful exit code
     And A new docker image for test project should be created
-    And I should get a message including "Python 3.7.8"
+    And I should get a message including "Python"
 
   Scenario: Execute docker run target successfully
     Given I have executed the kedro command "docker build"
@@ -78,7 +78,7 @@ Feature: Docker commands in new projects
     And I should get a message including "kedro.runner.sequential_runner - INFO - Pipeline execution completed successfully"
 
   Scenario: Execute docker run with custom base image
-    When I execute the kedro command "docker build --base-image python:3.7.8-buster"
+    When I execute kedro docker build with custom base image
     Then I should get a successful exit code
     When I execute the kedro command "docker run"
     Then I should get a successful exit code
@@ -109,12 +109,12 @@ Feature: Docker commands in new projects
   Scenario: Execute docker jupyter lab target
     Given I have executed the kedro command "docker build"
     When I execute the kedro command "docker jupyter lab"
-    Then Jupyter Notebook should run on port 8888
+    Then Jupyter Server should run on port 8888
 
   Scenario: Execute docker jupyter lab target on custom port
     Given I have executed the kedro command "docker build"
     When I execute the kedro command "docker jupyter lab --port 8899"
-    Then Jupyter Notebook should run on port 8899
+    Then Jupyter Server should run on port 8899
 
   Scenario: Jupyter port already used
     Given I have executed the kedro command "docker build"

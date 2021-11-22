@@ -47,7 +47,7 @@ def test_missing_docker_image(mocker):
     patched_subproc = mocker.patch("subprocess.run")
     patched_subproc.return_value.stdout = b""
     image_name = "image-name"
-    pattern = "Unable to find image `{}` locally".format(image_name)
+    pattern = f"Unable to find image `{image_name}` locally"
     with pytest.raises(ClickException, match=pattern):
         check_docker_image_exists(image_name)
     assert patched_subproc.call_count == 1
@@ -91,9 +91,7 @@ class TestComposeDockerRunArgs:
         )
         expected = []
         for _vol in kwargs["mount_volumes"]:
-            _mount_vol = "{}:{}/{}".format(
-                host_root / _vol, kwargs["container_root"], _vol
-            )
+            _mount_vol = f"{host_root / _vol}:{kwargs['container_root']}/{_vol}"
             expected.extend(["-v", _mount_vol])
         expected += kwargs["user_args"]
         assert compose_docker_run_args(**kwargs) == expected
@@ -140,9 +138,7 @@ class TestCopyTemplateFiles:
         with dest_file.open("r") as f:
             assert f.read().strip() == "helo world"
         captured = capsys.readouterr()
-        expected_out = "{} already exists and won't be overwritten.\n".format(
-            this_file.name
-        )
+        expected_out = f"{this_file.name} already exists and won't be overwritten.\n"
         assert "Creating" not in captured.out
         assert captured.out == expected_out
 

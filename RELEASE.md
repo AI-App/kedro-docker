@@ -36,7 +36,7 @@
 
 ## Thanks for supporting contributions
 
-[Adrian Piotr Kruszewski](https://github.com/akruszewski), [Kajetan Maurycy Olszewski](https://github.com/kaemo)
+[Adrian Piotr Kruszewski](https://github.com/akruszewski)
 
 # Release 0.2.0
 
