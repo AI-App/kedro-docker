@@ -63,9 +63,6 @@ commands:
       - run:
           name: Run all end to end tests
           command: make e2e-tests
-      - run:
-          name: Check for legal compliance
-          command: make legal
 
   # Windows-related commands
   win_setup_conda:
