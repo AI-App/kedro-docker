@@ -1,7 +1,5 @@
 # Kedro-Docker
-| `develop`                                                                                                                                                              | `master`                                                                                                                                                             |
-| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [![CircleCI](https://circleci.com/gh/quantumblacklabs/kedro-docker/tree/develop.svg?style=shield)](https://circleci.com/gh/quantumblacklabs/kedro-docker/tree/develop) | [![CircleCI](https://circleci.com/gh/quantumblacklabs/kedro-docker/tree/master.svg?style=shield)](https://circleci.com/gh/quantumblacklabs/kedro-docker/tree/master) |
+[![CircleCI](https://circleci.com/gh/quantumblacklabs/kedro-docker/tree/master.svg?style=shield)](https://circleci.com/gh/quantumblacklabs/kedro-docker/tree/master)
 
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python Version](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8-blue.svg)](https://pypi.org/project/kedro-docker/)
@@ -185,8 +183,8 @@ kedro docker cmd --docker-args="-p=4141:4141" kedro viz --host=0.0.0.0
 
 ## Can I contribute?
 
-Yes! Want to help build Kedro-Docker? Check out our guide to [contributing](https://github.com/quantumblacklabs/kedro-docker/blob/develop/CONTRIBUTING.md).
+Yes! Want to help build Kedro-Docker? Check out our guide to [contributing](https://github.com/quantumblacklabs/kedro-docker/blob/master/CONTRIBUTING.md).
 
 ## What licence do you use?
 
-Kedro-Docker is licensed under the [Apache 2.0](https://github.com/quantumblacklabs/kedro-docker/blob/develop/LICENSE.md) License.
+Kedro-Docker is licensed under the [Apache 2.0](https://github.com/quantumblacklabs/kedro-docker/blob/master/LICENSE.md) License.

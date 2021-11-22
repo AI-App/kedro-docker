@@ -156,7 +156,6 @@ workflows:
           filters:
             branches:
               only:
-                - develop
                 - master
     jobs:
       - build_36
